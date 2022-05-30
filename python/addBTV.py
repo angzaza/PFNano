@@ -297,6 +297,34 @@ def add_BTV(process, runOnMC=False, onlyAK4=False, onlyAK8=False, keepInputs=['D
                       doc="DeepCSV light btag discriminator",
                       precision=10),
     )
+
+    FatJetVars = cms.PSet(
+
+	uncorrpt=Var("?availableJECSets().size()>0?correctedJet('Uncorrected').pt():pt()",
+                     float,
+                     doc="Uncorrected pT",
+                     precision=10),
+        residual=Var("?availableJECSets().size()>0 ? pt()/correctedJet('L3Absolute').pt() : 1. ",
+                     float,
+                     doc="residual",
+                     precision=10),
+        jes=Var("?availableJECSets().size()>0 ? pt()/correctedJet('Uncorrected').pt() : 1.",
+                float,
+                doc="jes (jet substructure)",
+           	precision=10),
+	CombIVF=Var("bDiscriminator('combinedIVFSVBJetTags')",
+                float,
+                doc="combinedIVF",
+                precision=10),
+	DeepCSVBDisc=Var("bDiscriminator('deepCSVBJetTags:probb')+bDiscriminator('deepCSVBJetTags:probbb')",
+           float,
+           doc="DeepCSVBDisc",
+           precision=10),
+	DeepCSVb=Var("bDiscriminator('deepCSVBJetTags:probb')",
+           float,
+           doc="DeepCSVb",
+           precision=10),	
+    )
     
 
     # AK4
@@ -331,6 +359,7 @@ def add_BTV(process, runOnMC=False, onlyAK4=False, onlyAK8=False, keepInputs=['D
         extension=cms.bool(True),  # this is the extension table for FatJets
         variables=cms.PSet(
             CommonVars,
+	    FatJetVars,
             cms.PSet(
                 btagDDBvLV2 = Var("bDiscriminator('pfMassIndependentDeepDoubleBvLV2JetTags:probHbb')",float,doc="DeepDoubleX V2 discriminator for H(Z)->bb vs QCD",precision=10),
                 btagDDCvLV2 = Var("bDiscriminator('pfMassIndependentDeepDoubleCvLV2JetTags:probHcc')",float,doc="DeepDoubleX V2 discriminator for H(Z)->cc vs QCD",precision=10),
