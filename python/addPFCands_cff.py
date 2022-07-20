@@ -58,8 +58,12 @@ def addPFCands(process, runOnMC=False, allPF = False, onlyAK4=False, onlyAK8=Fal
                                                         jet_radius = cms.double(0.8),
                                                         name = cms.string("FatJetPFCands"),
                                                         idx_name = cms.string("pFCandsIdx"),
+																												#namebHadr = cms.string("FatJetbHadronss"),
+                                                        #idx_namebHadr = cms.string("bHadrIdx"),
                                                         nameSV = cms.string("FatJetSVs"),
                                                         idx_nameSV = cms.string("sVIdx"),
+                                                        nameMu = cms.string("FatJetMuons"),
+                                                        idx_nameMu = cms.string("MuIdx"),
                                                         )
     process.customAK4ConstituentsTable = cms.EDProducer("PatJetConstituentTableProducer",
                                                         #candidates = cms.InputTag("packedPFCandidates"),
