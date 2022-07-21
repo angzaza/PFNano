@@ -112,7 +112,9 @@ void JetConstituentTableProducer<T>::produce(edm::Event &iEvent, const edm::Even
   // PF Cands
   std::vector<float> btagEtaRel, btagPtRatio, btagPParRatio, btagSip3dVal, btagSip3dSig, btagJetDistVal, cand_pt;
   // Muons
-  std::vector<float> muon_pt, muon_eta, muon_phi;
+  std::vector<float> muon_pt, muon_eta, muon_phi, muon_ptrel;
+	std::vector<double> muon_isGlobal, muon_chi2Tk, muon_chi2;
+	std::vector<int> muon_nMuHit, muon_nMatched, muon_nTkHit, muon_nPixHit, muon_nOutHit;
 	// Secondary vertices
   std::vector<float> sv_mass, sv_pt, sv_ntracks, sv_chi2, sv_normchi2, sv_dxy, sv_dxysig, sv_d3d, sv_d3dsig, sv_costhetasvpv;
   std::vector<float> sv_ptrel, sv_phirel, sv_deltaR, sv_enratio;
@@ -239,6 +241,15 @@ void JetConstituentTableProducer<T>::produce(edm::Event &iEvent, const edm::Even
 				muon_pt.push_back(mu->pt());
 				muon_eta.push_back(mu->eta());
 		  	muon_phi.push_back(mu->phi());
+				muon_ptrel.push_back(mu->pt()/jet.pt());
+				muon_nMuHit.push_back(mu->outerTrack()->hitPattern().numberOfValidMuonHits());
+				muon_nMatched.push_back(mu->numberOfMatchedStations());
+				muon_nTkHit.push_back(mu->innerTrack()->hitPattern().numberOfValidHits());
+				muon_nPixHit.push_back(mu->innerTrack()->hitPattern().numberOfValidPixelHits());
+				muon_nOutHit.push_back(mu->innerTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_OUTER_HITS));
+				muon_chi2.push_back(mu->globalTrack()->normalizedChi2());
+				muon_chi2Tk.push_back(mu->innerTrack()->normalizedChi2());
+				muon_isGlobal.push_back(mu->isGlobalMuon());		
 			}
     }
   }
@@ -291,7 +302,15 @@ void JetConstituentTableProducer<T>::produce(edm::Event &iEvent, const edm::Even
 	 	muonTable->addColumn<float>("pt", muon_pt, "pt", nanoaod::FlatTable::FloatColumn, 10);
 	 	muonTable->addColumn<float>("eta", muon_eta, "eta", nanoaod::FlatTable::FloatColumn, 10);
 	 	muonTable->addColumn<float>("phi", muon_pt, "phi", nanoaod::FlatTable::FloatColumn, 10);
-	 
+	 	muonTable->addColumn<double>("isGlobal", muon_isGlobal, "isGlobal", nanoaod::FlatTable::FloatColumn, 10);
+	 	muonTable->addColumn<float>("ptrel", muon_ptrel, "pt relative to parent jet", nanoaod::FlatTable::FloatColumn, 10);
+	 	muonTable->addColumn<int>("nMuHit", muon_nMuHit, "number of muon hits", nanoaod::FlatTable::FloatColumn, 10);
+	 	muonTable->addColumn<int>("nMatched", muon_nMatched, "number of matched stations", nanoaod::FlatTable::FloatColumn, 10); 
+	 	muonTable->addColumn<int>("nTkHit", muon_nTkHit, "number of tracker hits", nanoaod::FlatTable::FloatColumn, 10);
+	 	muonTable->addColumn<int>("nPixHit", muon_nPixHit, "number of pixel hits", nanoaod::FlatTable::FloatColumn, 10);
+	 	muonTable->addColumn<int>("nOutHit", muon_nOutHit, "number of missing outer hits", nanoaod::FlatTable::FloatColumn, 10);
+	 	muonTable->addColumn<double>("chi2", muon_chi2, "chi2", nanoaod::FlatTable::FloatColumn, 10);
+	 	muonTable->addColumn<double>("chi2Tk", muon_chi2Tk, "chi2 inner track", nanoaod::FlatTable::FloatColumn, 10);
 	 }
 	 iEvent.put(std::move(muonTable), nameMu_);
 	 //
