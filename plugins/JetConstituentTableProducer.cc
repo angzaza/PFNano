@@ -293,13 +293,13 @@ void JetConstituentTableProducer<T>::produce(edm::Event &iEvent, const edm::Even
   }
   iEvent.put(std::move(svTable), nameSV_);
 
-	 // Muon table
-	 auto muonTable = std::make_unique<nanoaod::FlatTable>(outMuons.size(), nameMu_, false);
-	 // We fill from here only stuff that cannot be created with the SimpleFlatTnameableProducer
-	 muonTable->addColumn<int>("jetIdx", jetIdx_mu, "Index of the parent jet", nanoaod::FlatTable::IntColumn);
-	 muonTable->addColumn<int>(idx_nameMu_, muIdx, "Index in the Muon list", nanoaod::FlatTable::IntColumn);
-	 if (readBtag_) {
-	 	muonTable->addColumn<float>("pt", muon_pt, "pt", nanoaod::FlatTable::FloatColumn, 10);
+	// Muon table
+	auto muonTable = std::make_unique<nanoaod::FlatTable>(outMuons.size(), nameMu_, false);
+	// We fill from here only stuff that cannot be created with the SimpleFlatTnameableProducer
+	muonTable->addColumn<int>("jetIdx", jetIdx_mu, "Index of the parent jet", nanoaod::FlatTable::IntColumn);
+	muonTable->addColumn<int>(idx_nameMu_, muIdx, "Index in the Muon list", nanoaod::FlatTable::IntColumn);
+	if (readBtag_) {
+		muonTable->addColumn<float>("pt", muon_pt, "pt", nanoaod::FlatTable::FloatColumn, 10);
 	 	muonTable->addColumn<float>("eta", muon_eta, "eta", nanoaod::FlatTable::FloatColumn, 10);
 	 	muonTable->addColumn<float>("phi", muon_pt, "phi", nanoaod::FlatTable::FloatColumn, 10);
 	 	muonTable->addColumn<double>("isGlobal", muon_isGlobal, "isGlobal", nanoaod::FlatTable::FloatColumn, 10);
@@ -308,12 +308,12 @@ void JetConstituentTableProducer<T>::produce(edm::Event &iEvent, const edm::Even
 	 	muonTable->addColumn<int>("nMatched", muon_nMatched, "number of matched stations", nanoaod::FlatTable::FloatColumn, 10); 
 	 	muonTable->addColumn<int>("nTkHit", muon_nTkHit, "number of tracker hits", nanoaod::FlatTable::FloatColumn, 10);
 	 	muonTable->addColumn<int>("nPixHit", muon_nPixHit, "number of pixel hits", nanoaod::FlatTable::FloatColumn, 10);
-	 	muonTable->addColumn<int>("nOutHit", muon_nOutHit, "number of missing outer hits", nanoaod::FlatTable::FloatColumn, 10);
+	 	//muonTable->addColumn<int>("nOutHit", muon_nOutHit, "number of missing outer hits", nanoaod::FlatTable::FloatColumn, 10);
 	 	muonTable->addColumn<double>("chi2", muon_chi2, "chi2", nanoaod::FlatTable::FloatColumn, 10);
 	 	muonTable->addColumn<double>("chi2Tk", muon_chi2Tk, "chi2 inner track", nanoaod::FlatTable::FloatColumn, 10);
-	 }
-	 iEvent.put(std::move(muonTable), nameMu_);
-	 //
+	}
+	iEvent.put(std::move(muonTable), nameMu_);
+	//
 
   iEvent.put(std::move(outCands));
 }
@@ -323,7 +323,7 @@ void JetConstituentTableProducer<T>::fillDescriptions(edm::ConfigurationDescript
   edm::ParameterSetDescription desc;
   desc.add<std::string>("name", "JetPFCands");
   desc.add<std::string>("nameSV", "JetSV");
-  desc.add<std::string>("nameMu", "JetMu");
+  desc.add<std::string>("nameMu", "JetMuons");
   desc.add<std::string>("idx_name", "candIdx");
   desc.add<std::string>("idx_nameSV", "svIdx");
   desc.add<std::string>("idx_nameMu", "muIdx");
