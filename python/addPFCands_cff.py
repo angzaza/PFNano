@@ -62,7 +62,7 @@ def addPFCands(process, runOnMC=False, allPF = False, onlyAK4=False, onlyAK8=Fal
                                                         idx_name = cms.string("pFCandsIdx"),
                                                         nameSV = cms.string("FatJetSVs"),
                                                         idx_nameSV = cms.string("sVIdx"),
-														nameMu = cms.string("FatJetMuons"),
+                                                        nameMu = cms.string("FatJetMuons"),
                                                         idx_nameMu = cms.string("MuIdx"),
                                                         )
     process.customAK4ConstituentsTable = cms.EDProducer("PatJetConstituentTableProducer",
