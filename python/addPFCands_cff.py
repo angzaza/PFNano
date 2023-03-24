@@ -76,12 +76,26 @@ def addPFCands(process, runOnMC=False, allPF = False, onlyAK4=False, onlyAK8=Fal
                                                         idx_nameSV = cms.string("sVIdx"),
                                                         addMuonTable = cms.bool(False),
                                                         )
+    
+    process.customSubJetConstituentsTable = cms.EDProducer("PatJetConstituentTableProducer",
+                                                        candidates = candInput,
+                                                        jets = cms.InputTag("slimmedJetsAK8PFPuppiSoftDropPacked", "SubJets"), # was finalJets before
+                                                        jet_radius = cms.double(0.4),
+                                                        name = cms.string("SubJetPFCands"),
+                                                        idx_name = cms.string("pFCandsIdx"),
+                                                        nameSV = cms.string("SubJetSVs"),
+                                                        idx_nameSV = cms.string("sVIdx"),
+                                                        nameMu = cms.string("SubJetMuons"),
+                                                        idx_nameMu = cms.string("MuIdx"),
+                                                        addMuonTable = cms.bool(True),
+                                                        )
     if not allPF:
         process.customizedPFCandsTask.add(process.finalJetsConstituents)
     process.customizedPFCandsTask.add(process.customConstituentsExtTable)
     # linkedObjects are WIP for Run3
     process.customizedPFCandsTask.add(process.customAK8ConstituentsTable)
     process.customizedPFCandsTask.add(process.customAK4ConstituentsTable)
+    process.customizedPFCandsTask.add(process.customSubJetConstituentsTable)
     
     if runOnMC:
 
