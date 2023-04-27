@@ -73,8 +73,10 @@ def addPFCands(process, runOnMC=False, allPF = False, onlyAK4=False, onlyAK8=Fal
                                                         name = cms.string("JetPFCands"),
                                                         idx_name = cms.string("pFCandsIdx"),
                                                         nameSV = cms.string("JetSVs"),
-                                                        idx_nameSV = cms.string("sVIdx"),
+                                                        idx_nameSV = cms.string("sVIdx"),                                                      
                                                         addMuonTable = cms.bool(False),
+                                                        nameMu = cms.string("JetMuons"),
+                                                        #idx_nameMu = cms.string("MuIdx"),
                                                         )
     
     process.customSubJetConstituentsTable = cms.EDProducer("PatJetConstituentTableProducer",
@@ -141,7 +143,7 @@ def addPFCands(process, runOnMC=False, allPF = False, onlyAK4=False, onlyAK8=Fal
                                                          idx_name = cms.string("pFCandsIdx"),
                                                          idx_nameSV = cms.string("sVIdx"),
                                                          nameMu = cms.string("GenFatJetMuons"),
-                                                         idx_nameMu = cms.string("MuIdx"),
+                                                        # idx_nameMu = cms.string("MuIdx"),
                                                          readBtag = cms.bool(False),
                                                          addMuonTable = cms.bool(False),
                                                         )
@@ -153,7 +155,7 @@ def addPFCands(process, runOnMC=False, allPF = False, onlyAK4=False, onlyAK8=Fal
                                                          idx_name = cms.string("pFCandsIdx"),
                                                          idx_nameSV = cms.string("sVIdx"),
                                                          nameMu = cms.string("GenJetMuons"),
-                                                         idx_nameMu = cms.string("MuIdx"),
+                                                         #idx_nameMu = cms.string("MuIdx"),
                                                          readBtag = cms.bool(False),
                                                          addMuonTable = cms.bool(False),
                                                         )

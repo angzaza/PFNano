@@ -30,6 +30,7 @@ using namespace btagbtvdeep;
 #include "CommonTools/Utils/interface/StringCutObjectSelector.h"
 #include "DataFormats/NanoAOD/interface/FlatTable.h"
 
+
 template<typename T>
 class JetConstituentTableProducer : public edm::stream::EDProducer<> {
 public:
@@ -70,6 +71,7 @@ private:
   edm::ESGetToken<TransientTrackBuilder, TransientTrackRecord> track_builder_token_;
 
   const reco::Vertex *pv_ = nullptr;
+  
   
 };
 
@@ -124,12 +126,12 @@ void JetConstituentTableProducer<T>::produce(edm::Event &iEvent, const edm::Even
   iEvent.getByToken(vtx_token_, vtxs_);
   iEvent.getByToken(cand_token_, cands_);
   iEvent.getByToken(sv_token_, svs_);
+ // if(addMuonTable_){
   iEvent.getByToken(muon_token_, muons_);
-
+  //}
   if(readBtag_){
     track_builder_ = iSetup.getHandle(track_builder_token_);
   }
-
 
 
   for (unsigned i_jet = 0; i_jet < jets->size(); ++i_jet) {
@@ -237,12 +239,15 @@ void JetConstituentTableProducer<T>::produce(edm::Event &iEvent, const edm::Even
 
     //Muons    
     uint idx_mu=0;
+    if(addMuonTable_){
     for (const auto &mu : *muons_) {
       if(reco::deltaR2(mu, jet) < jet_radius_ * jet_radius_){
+        
         outMuons->push_back(mu);
-        if (readBtag_ && addMuonTable_) {
-          jetIdx_mu.push_back(i_jet);
-          muIdx.push_back(idx_mu);
+        jetIdx_mu.push_back(i_jet);
+        muIdx.push_back(idx_mu);
+        if (readBtag_) {
+        //if (readBtag_ && addMuonTable_) {
           muon_pt.push_back(mu.pt());
           muon_eta.push_back(mu.eta());
           muon_phi.push_back(mu.phi());
@@ -270,10 +275,11 @@ void JetConstituentTableProducer<T>::produce(edm::Event &iEvent, const edm::Even
           muon_isGlobal.push_back(mu.isGlobalMuon()); 
 
         }
-        idx_mu++;
       }
 
+      idx_mu++;
     }
+  }
   }
 
   auto candTable = std::make_unique<nanoaod::FlatTable>(outCands->size(), name_, false);
@@ -321,6 +327,10 @@ void JetConstituentTableProducer<T>::produce(edm::Event &iEvent, const edm::Even
   // Muon table
   auto muonTable = std::make_unique<nanoaod::FlatTable>(outMuons->size(), nameMu_, false);
   // We fill from here only stuff that cannot be created with the SimpleFlatTnameableProducer
+  //if(addMuonTable_){ 
+    //muonTable->addColumn<int>("jetIdx", jetIdx_mu, "Index of the parent jet");
+    //muonTable->addColumn<int>(idx_nameMu_, muIdx, "Index in the Muon list");
+  //if (readBtag_ ) {
   if (readBtag_ && addMuonTable_) {
     muonTable->addColumn<int>("jetIdx", jetIdx_mu, "Index of the parent jet");
     muonTable->addColumn<int>(idx_nameMu_, muIdx, "Index in the Muon list");
@@ -338,6 +348,7 @@ void JetConstituentTableProducer<T>::produce(edm::Event &iEvent, const edm::Even
     muonTable->addColumn<double>("chi2Tk", muon_chi2Tk, "chi2 inner track", 20);
   }
   iEvent.put(std::move(muonTable), nameMu_);
+  //}
 }
 
 template< typename T>

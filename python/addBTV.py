@@ -305,6 +305,11 @@ def add_BTV(process, runOnMC=False, onlyAK4=False, onlyAK8=False, keepInputs=['D
                      float,
                      doc="Uncorrected pT",
                      precision=10),
+        genpt=Var("genJet().pt() ",
+        #genpt=Var("?genJet().isNonnull() ? genJet().pt() : -1. ",
+                     float,
+                     doc="Gen pT",
+                     precision=10),
         residual=Var("?availableJECSets().size()>0 ? pt()/correctedJet('L3Absolute').pt() : 1. ",
                      float,
                      doc="residual",
@@ -313,6 +318,10 @@ def add_BTV(process, runOnMC=False, onlyAK4=False, onlyAK8=False, keepInputs=['D
                 float,
                 doc="jes (jet substructure)",
                 precision=10),
+        #flavour=Var("?hadronFlavour() !=0 ? hadronFlavour() : partonFlavour()",
+        #        float,
+        #        doc="jes flavour",
+        #        precision=10),
         CombIVF=Var("bDiscriminator('pfCombinedInclusiveSecondaryVertexV2BJetTags')",
                     float,
                     doc="combinedIVF",
@@ -338,6 +347,7 @@ def add_BTV(process, runOnMC=False, onlyAK4=False, onlyAK8=False, keepInputs=['D
                      float,
                      doc="DoubleSV discriminator",
                      precision=10),
+        
     ) 
 
     SubJetVars = cms.PSet(
