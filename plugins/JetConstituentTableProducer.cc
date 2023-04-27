@@ -327,13 +327,13 @@ void JetConstituentTableProducer<T>::produce(edm::Event &iEvent, const edm::Even
   // Muon table
   auto muonTable = std::make_unique<nanoaod::FlatTable>(outMuons->size(), nameMu_, false);
   // We fill from here only stuff that cannot be created with the SimpleFlatTnameableProducer
-  //if(addMuonTable_){ 
-    //muonTable->addColumn<int>("jetIdx", jetIdx_mu, "Index of the parent jet");
-    //muonTable->addColumn<int>(idx_nameMu_, muIdx, "Index in the Muon list");
-  //if (readBtag_ ) {
-  if (readBtag_ && addMuonTable_) {
+  if(addMuonTable_){ 
     muonTable->addColumn<int>("jetIdx", jetIdx_mu, "Index of the parent jet");
     muonTable->addColumn<int>(idx_nameMu_, muIdx, "Index in the Muon list");
+  if (readBtag_ ) {
+  //if (readBtag_ && addMuonTable_) {
+    //muonTable->addColumn<int>("jetIdx", jetIdx_mu, "Index of the parent jet");
+    //muonTable->addColumn<int>(idx_nameMu_, muIdx, "Index in the Muon list");
     muonTable->addColumn<float>("pt", muon_pt, "pt", 20);
     muonTable->addColumn<float>("eta", muon_eta, "eta", 20);
     muonTable->addColumn<float>("phi", muon_phi, "phi", 20);
@@ -348,7 +348,7 @@ void JetConstituentTableProducer<T>::produce(edm::Event &iEvent, const edm::Even
     muonTable->addColumn<double>("chi2Tk", muon_chi2Tk, "chi2 inner track", 20);
   }
   iEvent.put(std::move(muonTable), nameMu_);
-  //}
+  }
 }
 
 template< typename T>
